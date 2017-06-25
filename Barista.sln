@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Espresso", "Espresso\Espres
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "Updater\Updater.csproj", "{1878161F-0126-4AB9-BEDE-224530C80784}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stock", "Stock\Stock.csproj", "{BC25251C-C878-497A-AC55-26AFB4133849}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1878161F-0126-4AB9-BEDE-224530C80784}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1878161F-0126-4AB9-BEDE-224530C80784}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1878161F-0126-4AB9-BEDE-224530C80784}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC25251C-C878-497A-AC55-26AFB4133849}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC25251C-C878-497A-AC55-26AFB4133849}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC25251C-C878-497A-AC55-26AFB4133849}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC25251C-C878-497A-AC55-26AFB4133849}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
