@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Updater"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+    <DockPanel>
+        <Button DockPanel.Dock="Bottom" Height="30" Content="업데이트" Command="{Binding UpdateCommand}"/>
+        <ListView />
+    </DockPanel>
 </Window>
