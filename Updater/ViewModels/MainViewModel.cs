@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Updater.Views
+namespace Updater.ViewModels
 {
     class MainViewModel : BindableBase
     {

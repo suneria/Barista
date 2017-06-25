@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Stock;
 using System.Windows;
-using Updater.Views;
+using Updater.ViewModels;
 
 namespace Updater
 {
@@ -21,6 +16,12 @@ namespace Updater
             MainViewModel mainViewModel = new MainViewModel();
             window.DataContext = mainViewModel;
             window.Show();
+            _connection.LoggedIn += () =>
+            {
+            };
+            _connection.login();
         }
+
+        private Connection _connection = new Connection();
     }
 }
