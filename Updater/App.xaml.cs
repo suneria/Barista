@@ -1,4 +1,6 @@
-﻿using Stock;
+﻿using Microsoft.Practices.Unity;
+using Stock;
+using StockXing;
 using System.Windows;
 using Updater.ViewModels;
 
@@ -20,6 +22,11 @@ namespace Updater
             {
             };
             _connection.login();
+            //
+            UnityContainer container = new UnityContainer();
+            container.RegisterType<Feed<Tick>, TickFeed>(new ContainerControlledLifetimeManager());
+            Feed<Tick> tickFeed = container.Resolve<Feed<Tick>>();
+            tickFeed.request(new Request(), null);
         }
 
         private Connection _connection = new Connection();
