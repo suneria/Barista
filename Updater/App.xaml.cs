@@ -26,7 +26,7 @@ namespace Updater
             UnityContainer container = new UnityContainer();
             container.RegisterType<Feed<Tick>, TickFeed>(new ContainerControlledLifetimeManager());
             Feed<Tick> tickFeed = container.Resolve<Feed<Tick>>();
-            tickFeed.request(new Request(), null);
+            tickFeed.request(new RequestForm(), null);
         }
 
         private Connection _connection = new Connection();

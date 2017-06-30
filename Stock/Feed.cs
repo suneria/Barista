@@ -9,6 +9,6 @@ namespace Stock
 {
     public interface Feed<T>
     {
-        void request(Request request, ITargetBlock<T> target);
+        void request(RequestForm requestForm, ITargetBlock<T> target);
     }
 }

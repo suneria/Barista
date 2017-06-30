@@ -1,6 +1,6 @@
 ﻿namespace Stock
 {
-    public class Request
+    public class RequestForm
     {
     }
 }
