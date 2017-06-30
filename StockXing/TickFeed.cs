@@ -12,6 +12,16 @@ namespace StockXing
     {
         public void request(RequestForm requestForm, ITargetBlock<Tick> target)
         {
+            Need need = whatNeeded();
+            switch (need)
+            {
+                case Need.Past:
+                    break;
+                case Need.Present:
+                    break;
+                case Need.Future:
+                    break;
+            }
             //var realLayerAction = new ActionBlock<int[]>(data =>
             //{
             //    foreach (int num in data)
@@ -57,6 +67,11 @@ namespace StockXing
             ISourceBlock<Tick> t = new BufferBlock<Tick>();
             t.LinkTo(target);
             throw new NotImplementedException();
+        }
+
+        private Need whatNeeded()
+        {
+            return Need.Future;
         }
     }
 }
