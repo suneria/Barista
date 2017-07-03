@@ -1,6 +1,9 @@
 ﻿using Microsoft.Practices.Unity;
 using Stock;
 using StockXing;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks.Dataflow;
 using System.Windows;
 using Updater.ViewModels;
 
@@ -24,9 +27,15 @@ namespace Updater
             _connection.login();
             //
             UnityContainer container = new UnityContainer();
-            container.RegisterType<Feed<Tick>, TickFeed>(new ContainerControlledLifetimeManager());
-            Feed<Tick> tickFeed = container.Resolve<Feed<Tick>>();
-            tickFeed.request(new RequestForm(), null);
+            container.RegisterType<Feed<Tick, OneDay>, TickFeed>(new ContainerControlledLifetimeManager());
+            Feed<Tick, OneDay> tickFeed = container.Resolve<Feed<Tick, OneDay>>();
+            tickFeed.request(new OneDay(), new ActionBlock<IEnumerable<Tick>>(ticks =>
+            {
+                foreach (Tick tick in ticks)
+                {
+                    Console.WriteLine(tick.Price);
+                }
+            }));
         }
 
         private Connection _connection = new Connection();

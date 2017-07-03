@@ -45,9 +45,8 @@
   <ItemGroup>
     <Compile Include="Connection.cs" />
     <Compile Include="Feed.cs" />
-    <Compile Include="Need.cs" />
+    <Compile Include="OneDay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RequestForm.cs" />
     <Compile Include="Tick.cs" />
   </ItemGroup>
   <ItemGroup>

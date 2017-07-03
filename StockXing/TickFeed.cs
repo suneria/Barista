@@ -1,77 +1,47 @@
 ﻿using Stock;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 
 namespace StockXing
 {
-    public class TickFeed : Feed<Tick>
+    public class TickFeed : Feed<Tick, OneDay>
     {
-        public void request(RequestForm requestForm, ITargetBlock<Tick> target)
+        public void request(OneDay oneDay, ITargetBlock<IEnumerable<Tick>> target)
         {
-            Need need = whatNeeded();
-            switch (need)
+            TickDatabase db = new TickDatabase();
+            TickQuery query = new TickQuery();
+            TickReal real = new TickReal();
+            switch (whatNeeded())
             {
                 case Need.Past:
                     break;
                 case Need.Present:
+                    var realBuffer = new BufferBlock<IEnumerable<Tick>>();
+                    real.request(oneDay, realBuffer);
+                    var queryLayerAction = new ActionBlock<Tuple<IEnumerable<Tick>, IEnumerable<Tick>>>(dbAndQueryTicks =>
+                    {
+                        target.Post(dbAndQueryTicks.Item1);
+                        target.Post(dbAndQueryTicks.Item2);
+                        // Completion
+                        realBuffer.LinkTo(target);
+                    });
+                    //
+                    var dbAndQueryJoin = new JoinBlock<IEnumerable<Tick>, IEnumerable<Tick>>();
+                    dbAndQueryJoin.LinkTo(queryLayerAction);
+                    db.request(oneDay, dbAndQueryJoin.Target1);
+                    query.request(oneDay, dbAndQueryJoin.Target2);
                     break;
                 case Need.Future:
+                    // Real의 결과를 target으로 넣는다.
+                    real.request(oneDay, target);
                     break;
             }
-            //var realLayerAction = new ActionBlock<int[]>(data =>
-            //{
-            //    foreach (int num in data)
-            //    {
-            //        Console.WriteLine(num);
-            //    }
-            //});
-            //BufferBlock<int[]> realLayerBuffer = new BufferBlock<int[]>();
-            //Task.Run(() =>
-            //{
-            //    int start = 11;
-            //    while (true)
-            //    {
-            //        Thread.Sleep(1000);
-            //        realLayerBuffer.Post(new int[] { start++ });
-            //    }
-            //});
-            ////
-            //var queryLayerAction = new ActionBlock<Tuple<int[], int[]>>(data =>
-            //{
-            //    realLayerAction.Post(data.Item1);
-            //    realLayerAction.Post(data.Item2);
-            //    realLayerBuffer.LinkTo(realLayerAction);
-            //});
-            ////
-            //JoinBlock<int[], int[]> queryLayerJoin = new JoinBlock<int[], int[]>();
-            //queryLayerJoin.LinkTo(queryLayerAction);
-            //Task.Run(() =>
-            //{
-            //    Thread.Sleep(6000);
-            //    queryLayerJoin.Target2.Post(new int[] { 6, 7, 8, 9, 10 });
-            //    Console.WriteLine("Queried");
-            //});
-            //Task.Run(() =>
-            //{
-            //    Thread.Sleep(3000);
-            //    queryLayerJoin.Target1.Post(new int[] { 1, 2, 3, 4, 5 });
-            //    Console.WriteLine("DB Loaded");
-            //});
-            //queryLayerAction.Completion.Wait();
-
-
-            ISourceBlock<Tick> t = new BufferBlock<Tick>();
-            t.LinkTo(target);
-            throw new NotImplementedException();
         }
 
         private Need whatNeeded()
         {
-            return Need.Future;
+            return Need.Present;
         }
     }
 }

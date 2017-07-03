@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks.Dataflow;
 
 namespace Stock
 {
-    public interface Feed<T>
+    public interface Feed<TResult, TRequest>
     {
-        void request(RequestForm requestForm, ITargetBlock<T> target);
+        void request(TRequest request, ITargetBlock<IEnumerable<TResult>> target);
     }
 }
