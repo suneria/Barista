@@ -39,6 +39,10 @@ namespace StockXing
             }
         }
 
+        public void cancel()
+        {
+        }
+
         private Need whatNeeded()
         {
             return Need.Present;

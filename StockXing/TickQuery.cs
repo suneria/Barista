@@ -26,5 +26,9 @@ namespace StockXing
                 });
             });
         }
+
+        public void cancel()
+        {
+        }
     }
 }
