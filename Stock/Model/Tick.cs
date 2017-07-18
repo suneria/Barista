@@ -1,7 +1,11 @@
-﻿namespace Stock
+﻿using System;
+
+namespace Stock.Model
 {
     public class Tick
     {
+        public DateTime Time { get; set; }
+
         public string Name { get; set; }
 
         public int Quantity { get; set; }
