@@ -6,12 +6,14 @@ using System.Linq;
 
 namespace StockXing
 {
-    class RecentDatabaseRecord : RecentRecord<Tick, ListedStock>
+    public class RecentDatabaseRecord : RecentRecord<Tick>
     {
-        public DateTime getTime(ListedStock request)
+        public DateTime getTime(ListedStock stock)
         {
-            dbml.TickRWDataContext db = new dbml.TickRWDataContext(File.ReadAllText("db.txt"));
-            return db.Tick.Where(t => t.Name == request.Name).OrderByDescending(t => t.Time).Select(t => t.Time).FirstOrDefault();
+            using (dbml.TickRWDataContext db = new dbml.TickRWDataContext(File.ReadAllText("db.txt")))
+            {
+                return db.Tick.Where(t => t.Name == stock.Name).OrderByDescending(t => t.Time).Select(t => t.Time).FirstOrDefault();
+            }
         }
     }
 }

@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Stock;
+using System;
 
 namespace StockXing
 {
-    interface RecentRecord<TResult, TRequest>
+    public interface RecentRecord<TType>
     {
-        DateTime getTime(TRequest request);
+        DateTime getTime(ListedStock stock);
     }
 }
