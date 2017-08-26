@@ -1,32 +1,33 @@
 ﻿using Stock;
-using System;
+using Stock.Model;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using System;
 
 namespace StockXing
 {
     class TickReal : Feed<Tick, OneDay>
     {
-        public void request(OneDay request, ITargetBlock<IEnumerable<Tick>> target)
+        public override void request(OneDay request)
         {
-            Task.Run(() =>
-            {
-                while (true)
-                {
-                    Thread.Sleep(1000);
-                    target.Post(new Tick[]
-                    {
-                    new Tick(){ Price = 11 },
-                    });
-                }
-            });
+            //Task.Run(() =>
+            //{
+            //    while (true)
+            //    {
+            //        Thread.Sleep(1000);
+            //        target(new Tick[]
+            //        {
+            //            new Tick(){Price = 11 },
+            //        });
+            //        //target.Post(new Tick[]
+            //        //{
+            //        //new Tick(){ Price = 11 },
+            //        //});
+            //    }
+            //});
         }
 
-        public void cancel()
+        public override void cancel()
         {
         }
     }

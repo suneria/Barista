@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace StockXing
 {
-    public enum Need { Past, Present, Future };
+    public enum Need { Past, PastAndFuture, Future };
 }

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stock", "Stock\Stock.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockXing", "StockXing\StockXing.csproj", "{70104F90-91CE-463A-BB54-748110D540DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{D0656676-BA09-4853-83BB-943CD3E3574A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{70104F90-91CE-463A-BB54-748110D540DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70104F90-91CE-463A-BB54-748110D540DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70104F90-91CE-463A-BB54-748110D540DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0656676-BA09-4853-83BB-943CD3E3574A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0656676-BA09-4853-83BB-943CD3E3574A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0656676-BA09-4853-83BB-943CD3E3574A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0656676-BA09-4853-83BB-943CD3E3574A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

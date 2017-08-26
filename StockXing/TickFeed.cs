@@ -1,13 +1,17 @@
 ﻿using Stock;
-using System;
-using System.Collections.Generic;
+using Stock.Model;
 using System.Threading.Tasks.Dataflow;
 
 namespace StockXing
 {
     public class TickFeed : Feed<Tick, OneDay>
     {
-        public void request(OneDay oneDay, ITargetBlock<IEnumerable<Tick>> target)
+        public TickFeed(RecentRecord<Tick> recentRecord)
+        {
+            RecentRecord = recentRecord;
+        }
+
+        public override void request(OneDay oneDay)
         {
             TickDatabase db = new TickDatabase();
             TickQuery query = new TickQuery();
@@ -16,36 +20,48 @@ namespace StockXing
             {
                 case Need.Past:
                     break;
-                case Need.Present:
-                    var realBuffer = new BufferBlock<IEnumerable<Tick>>();
-                    real.request(oneDay, realBuffer);
-                    var queryLayerAction = new ActionBlock<Tuple<IEnumerable<Tick>, IEnumerable<Tick>>>(dbAndQueryTicks =>
+                case Need.PastAndFuture:
+                    Tick lastTick = null;
+                    var filter = new ActionBlock<Tick>(async tick =>
                     {
-                        target.Post(dbAndQueryTicks.Item1);
-                        target.Post(dbAndQueryTicks.Item2);
-                        // Completion
-                        realBuffer.LinkTo(target);
+                        if (lastTick == null || lastTick.Time < tick.Time || (lastTick.Time == tick.Time && lastTick.Volume < tick.Volume))
+                        {
+                            //
+                            Buffer.Post(tick);
+                            await Buffer.SendAsync(tick);
+                        }
+                        lastTick = tick;
                     });
-                    //
-                    var dbAndQueryJoin = new JoinBlock<IEnumerable<Tick>, IEnumerable<Tick>>();
-                    dbAndQueryJoin.LinkTo(queryLayerAction);
-                    db.request(oneDay, dbAndQueryJoin.Target1);
-                    query.request(oneDay, dbAndQueryJoin.Target2);
+                    db.Target = filter;
+                    db.Completion.ContinueWith(a =>
+                    {
+                        query.Target = filter;
+                        query.Completion.ContinueWith(b =>
+                        {
+                            real.Target = filter;
+                        });
+                    });
+                    var since = new Since { Stock = oneDay.Stock, After = RecentRecord.getTime(oneDay.Stock), Base = oneDay.Date };
+                    real.request(oneDay);
+                    query.request(since);
+                    db.request(oneDay);
                     break;
                 case Need.Future:
                     // Real의 결과를 target으로 넣는다.
-                    real.request(oneDay, target);
+                    real.request(oneDay);
                     break;
             }
         }
 
-        public void cancel()
+        public override void cancel()
         {
         }
 
         private Need whatNeeded()
         {
-            return Need.Present;
+            return Need.PastAndFuture;
         }
+
+        private RecentRecord<Tick> RecentRecord { get; set; }
     }
 }

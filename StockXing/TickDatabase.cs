@@ -1,34 +1,47 @@
 ﻿using Stock;
+using Stock.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 
 namespace StockXing
 {
     class TickDatabase : Feed<Tick, OneDay>
     {
-        public void request(OneDay request, ITargetBlock<IEnumerable<Tick>> target)
+        public override void request(OneDay request)
         {
-            Task.Run(() =>
+            StockXing.dbml.TickRWDataContext db = new StockXing.dbml.TickRWDataContext(File.ReadAllText("db.txt"));
+            IEnumerable<StockXing.dbml.Tick> dbTicks = db.Tick.Where(tick => tick.Name == request.Stock.Name && tick.Time.Date == request.Date);
+            foreach (Tick tick in toPrimitive(dbTicks))
             {
-                Thread.Sleep(6000);
-                target.Post(new Tick[]
-                {
-                    new Tick(){ Price = 1 },
-                    new Tick(){ Price = 2 },
-                    new Tick(){ Price = 3 },
-                    new Tick(){ Price = 4 },
-                    new Tick(){ Price = 5 },
-                });
-            });
+                //
+                Buffer.Post(tick);
+            }
+            Buffer.Complete();
         }
 
-        public void cancel()
+        public override void cancel()
         {
+        }
+
+        private IEnumerable<Tick> toPrimitive(IEnumerable<StockXing.dbml.Tick> persistentTicks)
+        {
+            IEnumerator<StockXing.dbml.Tick> enumerator = persistentTicks.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                yield return new Tick
+                {
+                    Name = enumerator.Current.Name,
+                    Time = enumerator.Current.Time,
+                    Price = enumerator.Current.Price,
+                    Quantity = enumerator.Current.Quantity,
+                    Rate = enumerator.Current.Rate,
+                    Amount = enumerator.Current.Amount,
+                    Volume = enumerator.Current.Volume,
+                };
+            }
         }
     }
 }
